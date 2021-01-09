@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcryptNodejs = require('bcrypt-nodejs');
+const bcrypt = require('bcrypt-nodejs');
 
 require('mongoose-type-email');
 
@@ -22,7 +22,11 @@ const User = new mongoose.Schema({
 });
 
 User.methods.genHash = (password) => {
-    return bcryptNodejs.hashSync(password, bcryptNodejs.genSaltSync(7), null);
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(7), null);
+};
+
+User.methods.validatePassword = (password, cb) => {
+    return bcrypt.compare(password, this.password, cb);
 };
 
 module.exports = mongoose.model('User', User);
